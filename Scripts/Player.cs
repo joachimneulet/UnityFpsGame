@@ -30,7 +30,7 @@ public class Player : NetworkBehaviour
     private GameObject deathEffect;
 
     public float GetHealthAmount(){
-      return currentHealth;
+      return (float)currentHealth / maxHealth;
     }
 
     public void SetupPlayer(){
@@ -67,7 +67,7 @@ public class Player : NetworkBehaviour
       }
 
       if(Input.GetKeyDown("k")){
-        RpcTakeDamage(200f);
+        RpcTakeDamage(20f);
       }
     }
 

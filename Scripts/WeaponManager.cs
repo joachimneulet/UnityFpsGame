@@ -17,7 +17,7 @@ public class WeaponManager : NetworkBehaviour
 
     private AudioSource _shootingSound;
 
-    private bool isReloading = false;
+    public static bool isReloading = false;
     private bool isShooting = false;
 
     void Start()
@@ -62,6 +62,15 @@ public class WeaponManager : NetworkBehaviour
         StartCoroutine(Reload_Coroutine());
     }
 
+    public void Aim(){
+      Animator anim = currentGraphics.GetComponent<Animator>();
+      if(PlayerShoot.isAiming){
+        anim.SetBool("Aiming", true);
+      }else{
+        anim.SetBool("Aiming", false);
+      }
+    }
+
     public void Shoot(){
       if(isShooting == true)
       {
@@ -75,16 +84,10 @@ public class WeaponManager : NetworkBehaviour
 
     public IEnumerator Reload_Coroutine()
     {
-        Debug.Log("Reloading...");
-
         isReloading = true;
-
         CmdOnReload();
-
         yield return new WaitForSeconds(currentWeapon.reloadTime);
-
         currentWeapon.currentAmmo = currentWeapon.maxCapacity;
-
         isReloading = false;
     }
 

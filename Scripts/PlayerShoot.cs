@@ -16,7 +16,7 @@ public class PlayerShoot : NetworkBehaviour
     private Player player;
 
     private bool _isDead;
-    private float spreadFactor = 0.05f;
+    private float spreadFactor = 0.03f;
 
     private int maxAmmo = 100;
     private int currentMagazineAmmo;
@@ -49,22 +49,30 @@ public class PlayerShoot : NetworkBehaviour
             return;
           }
         }
-        if(currentWeapon.fireRate <= 0){
-          if(Input.GetButtonDown("Fire1")){
-            Shoot();
-          }
-        }else{
-          if(Input.GetButtonDown("Fire1")){
-            InvokeRepeating("Shoot", 0f, 1f/currentWeapon.fireRate);
-          }else if(Input.GetButtonUp("Fire1")){
-            CancelInvoke("Shoot");
+        if(!WeaponManager.isReloading){
+          if(currentWeapon.fireRate <= 0){
+            if(Input.GetButtonDown("Fire1")){
+              Shoot();
+            }
+          }else{
+            if(Input.GetButtonDown("Fire1")){
+                InvokeRepeating("Shoot", 0f, 1f/currentWeapon.fireRate);
+              }else if(Input.GetButtonUp("Fire1")){
+              CancelInvoke("Shoot");
+            }
           }
         }
 
-        if(Input.GetButtonDown("Fire2")){
+        if(Input.GetButtonDown("Fire2") && PlayerController.isSprinting == false){
           isAiming = true;
+          weaponManager.Aim();
         }
         if(Input.GetButtonUp("Fire2")){
+          isAiming = false;
+          weaponManager.Aim();
+        }
+
+        if(PlayerController.isSprinting == true){
           isAiming = false;
         }
     }
@@ -75,13 +83,17 @@ public class PlayerShoot : NetworkBehaviour
         return;
       }
 
+      if(WeaponManager.isReloading){
+        return;
+      }
+
       if(currentWeapon.currentAmmo <= 0)
       {
           weaponManager.Reload();
           return;
       }
 
-      currentWeapon.currentAmmo--;
+      currentWeapon.currentAmmo--;;
 
       weaponManager.Shoot();
       CmdOnShoot();
@@ -89,7 +101,14 @@ public class PlayerShoot : NetworkBehaviour
       Vector3 direction = cam.transform.forward;
       float newSpreadFactor = spreadFactor;
       if(isAiming){
-        newSpreadFactor = spreadFactor/3;
+        newSpreadFactor = spreadFactor/2;
+      }
+
+      if(PlayerController.isMoving){
+        newSpreadFactor = spreadFactor*2;
+      }
+      if(PlayerController.isSprinting){
+        newSpreadFactor = spreadFactor*4;
       }
       direction.x += Random.Range(-newSpreadFactor, newSpreadFactor);
       direction.y += Random.Range(-newSpreadFactor, newSpreadFactor);

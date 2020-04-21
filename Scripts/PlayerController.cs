@@ -12,11 +12,29 @@ public class PlayerController : MonoBehaviour
 
     private PlayerMotor motor;
 
+    public static bool isSprinting = false;
+    public static bool isMoving = false;
+
     private void Start(){
       motor = GetComponent<PlayerMotor>();
     }
 
     private void Update(){
+      //Check if character is moving
+      if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0){
+        isMoving = true;
+      }else{
+        isMoving = false;
+      }
+
+      if(Input.GetButton("Sprint")){
+        isSprinting = true;
+        speed = 10f;
+      }else{
+        isSprinting = false;
+        speed = 5f;
+      }
+
       if(PauseMenu.isOn ==true){
         //Unlock Mouse
         if(Cursor.lockState != CursorLockMode.None){
