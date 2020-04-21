@@ -18,7 +18,7 @@ Added :
 - 3D shot sounds
 - Weapon sway
 - Nicer crosshair
-- Adaptable croshair when moving or running
+- Adaptable crosshair when moving or running
 
 Fixed :
 - Player idle animation playing when aiming
