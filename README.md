@@ -12,13 +12,13 @@ Will add the full project later
 ### v0.15
 Added :
 - Player Run ability
-- Gun spread factor multiplied when running
-- Cannot aim and run at the same time
+  - Gun spread factor multiplied when running
+  - Cannot aim and run at the same time
 - UI bullets count
 - 3D shot sounds
 - Weapon sway
 - Nicer crosshair
-- Adaptable crosshair when moving or running
+  - Adaptable crosshair when moving or running
 
 Fixed :
 - Player idle animation playing when aiming
