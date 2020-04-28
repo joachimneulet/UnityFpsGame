@@ -12,6 +12,15 @@ Will add the full project later
 * [Unity3D Engine](https://unity.com/fr) - The game engine used
 
 ## Versioning
+### v0.16
+Added :
+- Settings Menu
+  - Resolution and fullscreen/windowed selection
+  - Volume selection
+- Script adaptable for new weapons
+  - It's glitched though
+
+
 ### v0.15
 Added :
 - Player Run ability
