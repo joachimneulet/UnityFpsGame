@@ -4,22 +4,27 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerWeapon
 {
-    public string name = "AK74";
-    public int damage = 10;
-    public float range = 100f;
-    public int maxCapacity = 30;
+    public string name;
+    public int damage;
+    public float range;
+    public int maxCapacity;
     [HideInInspector]
     public int currentAmmo;
 
     public AudioSource shootingSound;
 
-    public float fireRate = 0f;
+    public float fireRate;
 
     public GameObject graphics;
 
-    public float reloadTime = 1f;
+    public float reloadTime;
+
+    public float spreadFactor;
+
+    public Vector3 hipSight;
+    public Vector3 aimSight;
 
     public PlayerWeapon(){
-      currentAmmo = maxCapacity;
+
     }
 }

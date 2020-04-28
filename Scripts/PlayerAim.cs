@@ -9,15 +9,20 @@ public class PlayerAim : MonoBehaviour
     [SerializeField]
     private float aimSpeed;
 
-
     void Update(){
       if(PlayerShoot.isAiming){
+
           AimDownSight(aimDownSights, aimSpeed);
       }
       else{
         AimFromHip(hipFire, aimSpeed);
       }
     }
+    /*
+    public static void SetWeaponSight(Vector3 _hipFire){
+      hipFire = _hipFire;
+    }
+    */
 
     private void AimDownSight(Vector3 _aimSight, float _aimSpeed){
         transform.localPosition = Vector3.Slerp(transform.localPosition, _aimSight, _aimSpeed * Time.deltaTime);

@@ -16,10 +16,10 @@ public class PlayerShoot : NetworkBehaviour
     private Player player;
 
     private bool _isDead;
-    private float spreadFactor = 0.03f;
 
     private int maxAmmo = 100;
     private int currentMagazineAmmo;
+    private float lastFired;
     public static bool isAiming = false;
 
     public static bool hasHit = false;
@@ -49,16 +49,18 @@ public class PlayerShoot : NetworkBehaviour
             return;
           }
         }
+
         if(!WeaponManager.isReloading){
           if(currentWeapon.fireRate <= 0){
             if(Input.GetButtonDown("Fire1")){
               Shoot();
             }
           }else{
-            if(Input.GetButtonDown("Fire1")){
-                InvokeRepeating("Shoot", 0f, 1f/currentWeapon.fireRate);
-              }else if(Input.GetButtonUp("Fire1")){
-              CancelInvoke("Shoot");
+            if(Input.GetButton("Fire1")){
+              if(Time.time - lastFired > 1 / currentWeapon.fireRate){
+                lastFired = Time.time;
+                Shoot();
+              }
             }
           }
         }
@@ -99,16 +101,16 @@ public class PlayerShoot : NetworkBehaviour
       CmdOnShoot();
 
       Vector3 direction = cam.transform.forward;
-      float newSpreadFactor = spreadFactor;
+      float newSpreadFactor = currentWeapon.spreadFactor;
       if(isAiming){
-        newSpreadFactor = spreadFactor/2;
+        newSpreadFactor = currentWeapon.spreadFactor/2;
       }
 
       if(PlayerController.isMoving){
-        newSpreadFactor = spreadFactor*2;
+        newSpreadFactor = currentWeapon.spreadFactor*2;
       }
       if(PlayerController.isSprinting){
-        newSpreadFactor = spreadFactor*4;
+        newSpreadFactor = currentWeapon.spreadFactor*4;
       }
       direction.x += Random.Range(-newSpreadFactor, newSpreadFactor);
       direction.y += Random.Range(-newSpreadFactor, newSpreadFactor);

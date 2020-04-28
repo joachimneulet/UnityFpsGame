@@ -7,6 +7,8 @@ public class WeaponManager : NetworkBehaviour
     [SerializeField]
     private PlayerWeapon primaryWeapon;
     [SerializeField]
+    private PlayerWeapon secondaryWeapon;
+    [SerializeField]
     private string weaponLayerName = "Weapon";
     [SerializeField]
     private Transform weaponHolder;
@@ -19,12 +21,22 @@ public class WeaponManager : NetworkBehaviour
 
     public static bool isReloading = false;
     private bool isShooting = false;
+    private GameObject _weaponIns;
 
     void Start()
     {
         EquipWeapon(primaryWeapon);
         ps = GetComponent<PlayerShoot>();
         _shootingSound = currentWeapon.shootingSound.GetComponent<AudioSource>();
+    }
+
+    void Update(){
+       if (Input.GetAxis("Mouse ScrollWheel") > 0f){
+         EquipWeapon(secondaryWeapon);
+       }
+       if (Input.GetAxis("Mouse ScrollWheel") < 0f){
+         EquipWeapon(primaryWeapon);
+       }
     }
 
     public PlayerWeapon GetCurrentWeapon(){
@@ -39,7 +51,13 @@ public class WeaponManager : NetworkBehaviour
     private void EquipWeapon(PlayerWeapon _weapon){
       currentWeapon = _weapon;
 
-      GameObject _weaponIns = (GameObject)Instantiate(_weapon.graphics, weaponHolder.position, weaponHolder.rotation);
+      if(_weaponIns != null){
+        Destroy(_weaponIns);
+      }else{
+        currentWeapon.currentAmmo = currentWeapon.maxCapacity;
+      }
+
+      _weaponIns = (GameObject)Instantiate(_weapon.graphics, weaponHolder.position, weaponHolder.rotation);
       _weaponIns.transform.SetParent(weaponHolder);
 
       currentGraphics = _weaponIns.GetComponent<WeaponGraphics>();

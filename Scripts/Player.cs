@@ -65,10 +65,6 @@ public class Player : NetworkBehaviour
       if(!isLocalPlayer){
         return;
       }
-
-      if(Input.GetKeyDown("k")){
-        RpcTakeDamage(20f);
-      }
     }
 
     [ClientRpc]

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -33,6 +34,17 @@ public class PlayerUI : MonoBehaviour
     private int topPos = 10;
     private int bottomPos = -10;
 
+    //Chat
+    [SerializeField]
+    private List<Message> messageList = new List<Message>();
+    private int maxMessages = 25;
+    [SerializeField]
+    private GameObject chatPanel, textObject;
+    [SerializeField]
+    private InputField chatBox;
+
+    public Color playerMessage, info;
+
     void Start(){
       hitmarker.SetActive(false);
       PauseMenu.isOn = false;
@@ -52,6 +64,18 @@ public class PlayerUI : MonoBehaviour
       if(PlayerShoot.hasHit){
         SetHitmarker();
       }
+
+      //Chat System
+      if(chatBox.text != ""){
+        if(Input.GetKeyDown(KeyCode.Return)){
+          SendMessageToChat(chatBox.text, Message.MessageType.playerMessage);
+        }
+      }else{
+        if(!chatBox.isFocused && Input.GetKeyDown(KeyCode.Return)){
+          chatBox.ActivateInputField();
+        }
+      }
+
 
       if(PlayerController.isMoving){
         leftPos--;
@@ -115,6 +139,33 @@ public class PlayerUI : MonoBehaviour
 
     void SetAmmoAmount(int amount){
       ammoText.text = amount.ToString();
+    }
+
+    public void SendMessageToChat(string text, Message.MessageType messageType){
+      if(messageList.Count >= maxMessages){
+        Destroy(messageList[0].textObject.gameObject);
+        messageList.Remove(messageList[0]);
+      }
+      Message newMessage = new Message();
+      newMessage.text = text;
+
+      GameObject newText = Instantiate(textObject, chatPanel.transform);
+      newMessage.textObject = newText.GetComponent<Text>();
+      newMessage.textObject.text = newMessage.text;
+      newMessage.textObject.color = MessageTypeColor(messageType);
+
+      messageList.Add(newMessage);
+    }
+
+    Color MessageTypeColor(Message.MessageType messageType){
+      Color color = info;
+
+      switch(messageType){
+        case Message.MessageType.playerMessage :
+          color = playerMessage;
+          break;
+      }
+      return color;
     }
 
 }
