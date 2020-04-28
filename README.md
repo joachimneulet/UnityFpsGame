@@ -19,6 +19,10 @@ Added :
   - Volume selection
 - Script adaptable for new weapons
   - It's glitched though
+  
+Additions needed :
+- Fix Player weapons hip transform point
+- Add Player jump ability
 
 
 ### v0.15
